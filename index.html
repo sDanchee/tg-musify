@@ -33,7 +33,7 @@
             resDiv.innerHTML = "Поиск...";
 
             // ЗАМЕНИ НА СВОЙ IP (Например: http://95.123.45.67:8000)
-            const response = await fetch(`http://213.230.112.237/32:8000/search?q=${q}`);
+            const response = await fetch(`http://213.230.112.237:8000/search?q=${q}`);
             const data = await response.json();
 
             resDiv.innerHTML = "";
