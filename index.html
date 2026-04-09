@@ -5,153 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Musify Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --neon: #00f2ff;
-            --pink: #ff00ff;
-            --bg: #080808;
-            --card: rgba(255, 255, 255, 0.05);
+        :root { --neon: #00f2ff; --pink: #ff00ff; --bg: #080808; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .container { width: 100%; max-width: 400px; }
+        h1 { color: var(--neon); text-shadow: 0 0 15px var(--neon); letter-spacing: 5px; }
+        .user-info { margin-bottom: 20px; color: var(--pink); font-weight: bold; }
+        .search-box {
+            width: 100%; background: #111; border: 1px solid #333;
+            padding: 15px; border-radius: 15px; color: white; margin-bottom: 15px;
+            box-sizing: border-box; outline: none;
         }
-
-        body {
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column;
-            align-items: center; min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .app-container {
-            width: 100%; max-width: 450px;
-            padding: 20px; box-sizing: border-box;
-        }
-
-        header { text-align: center; margin-bottom: 30px; padding-top: 10px; }
-        h1 { font-size: 32px; letter-spacing: 6px; margin: 0; color: var(--neon); text-shadow: 0 0 15px var(--neon); }
-        .welcome-msg { font-size: 16px; margin-top: 10px; color: #ccc; }
-        #user-name { color: var(--pink); font-weight: bold; text-shadow: 0 0 10px var(--pink); }
-
-        .nav-tabs {
-            display: flex; justify-content: space-between;
-            background: var(--card); padding: 5px; border-radius: 15px;
-            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .tab {
-            flex: 1; padding: 12px; text-align: center; font-size: 12px;
-            font-weight: bold; cursor: pointer; border-radius: 10px;
-            transition: 0.3s; color: #777;
-        }
-
-        .tab.active { background: rgba(0, 242, 255, 0.1); color: var(--neon); box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.2); }
-
-        .search-section { display: block; }
-        .search-input {
-            width: 100%; background: #151515; border: 1px solid #333;
-            padding: 18px; border-radius: 20px; color: white;
-            font-size: 16px; box-sizing: border-box; outline: none;
-            margin-bottom: 15px; transition: 0.3s;
-        }
-        .search-input:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-
         .main-btn {
             width: 100%; background: linear-gradient(45deg, var(--neon), var(--pink));
-            border: none; padding: 18px; border-radius: 20px;
-            color: white; font-weight: bold; font-size: 14px;
-            text-transform: uppercase; letter-spacing: 2px;
-            cursor: pointer; box-shadow: 0 5px 20px rgba(255, 0, 255, 0.3);
-            transition: 0.3s;
+            border: none; padding: 15px; border-radius: 15px;
+            color: white; font-weight: bold; cursor: pointer;
         }
-
-        .content-section { display: none; text-align: center; padding: 40px 20px; background: var(--card); border-radius: 20px; border: 1px dashed #444; }
-
-        footer { margin-top: auto; padding: 20px; font-size: 10px; color: #444; letter-spacing: 2px; }
+        .nav { display: flex; justify-content: space-around; margin-bottom: 20px; background: #111; padding: 10px; border-radius: 10px; }
+        .nav div { font-size: 12px; color: #666; cursor: pointer; }
+        .nav .active { color: var(--neon); }
     </style>
 </head>
 <body>
-
-    <div class="app-container">
-        <header>
-            <h1>MUSIFY</h1>
-            <div class="welcome-msg">Привет, <span id="user-name">Меломан</span>! ✨</div>
-        </header>
-
-        <div class="nav-tabs">
-            <div id="tab-search" class="tab active" onclick="showSection('search')">ПОИСК</div>
-            <div id="tab-favs" class="tab" onclick="showSection('favs')">МОЁ</div>
-            <div id="tab-trends" class="tab" onclick="showSection('trends')">ТРЕНДЫ</div>
+    <div class="container">
+        <h1>MUSIFY</h1>
+        <div class="user-info">Привет, <span id="user-name">Меломан</span>!</div>
+        
+        <div class="nav">
+            <div class="active">ПОИСК</div>
+            <div>МОЁ</div>
+            <div>ТРЕНДЫ</div>
         </div>
 
-        <div id="search" class="search-section">
-            <input type="text" id="search-query" class="search-input" placeholder="Введите артиста или трек...">
-            <button id="send-btn" class="main-btn" onclick="handleSearch()">Найти музыку</button>
-        </div>
-
-        <div id="favs" class="content-section">
-            <p>Твоя медиатека пуста.<br>Добавляй треки через ❤️ в боте!</p>
-        </div>
-
-        <div id="trends" class="content-section">
-            <p>Топ-10 чарта сегодня 🔥<br>Скоро появится здесь!</p>
-        </div>
+        <input type="text" id="search-query" class="search-box" placeholder="Введите название...">
+        <button class="main-btn" onclick="handleSearch()">НАЙТИ ТРЕК</button>
     </div>
-
-    <footer>PREMIUM ACCOUNT ACCESS</footer>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.ready();
         tg.expand();
 
-        // 1. Пытаемся получить имя сразу после готовности
-        function setUserName() {
-            const user = tg.initDataUnsafe?.user;
-            if (user && user.first_name) {
-                document.getElementById('user-name').innerText = user.first_name;
-            }
-        }
-        setUserName();
+        // Имя пользователя
+        document.getElementById('user-name').innerText = tg.initDataUnsafe?.user?.first_name || "Меломан";
 
-        // 2. Переключение вкладок
-        function showSection(sectionId) {
-            document.getElementById('search').style.display = 'none';
-            document.getElementById('favs').style.display = 'none';
-            document.getElementById('trends').style.display = 'none';
-            
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            
-            document.getElementById(sectionId).style.display = 'block';
-            document.getElementById('tab-' + sectionId).classList.add('active');
-        }
-
-        // 3. Обработка поиска БЕЗ ЗАКРЫТИЯ
         function handleSearch() {
-            const queryInput = document.getElementById('search-query');
-            const btn = document.getElementById('send-btn');
-            const query = queryInput.value;
-
+            const query = document.getElementById('search-query').value;
             if (query.trim() !== "") {
-                // Отправляем данные боту
-                tg.sendData(query); 
+                // Этот метод НЕ ЗАКРЫВАЕТ приложение, а открывает выбор чата для поиска
+                // Или можно просто вызывать уведомление, но для реального поиска внутри 
+                // нужно использовать API. Пока сделаем так, чтобы оно просто не закрывалось:
                 
-                // Визуальный отклик
-                btn.innerText = "ОТПРАВЛЕНО В ЧАТ ✅";
-                btn.style.background = "#222";
-                btn.disabled = true;
-
-                // Через 2 секунды возвращаем кнопку в строй для нового поиска
-                setTimeout(() => {
-                    btn.innerText = "НАЙТИ ЕЩЕ";
-                    btn.style.background = "linear-gradient(45deg, var(--neon), var(--pink))";
-                    btn.disabled = false;
-                    queryInput.value = ""; // Очищаем поле
-                }, 2500);
-                
-            } else {
-                tg.showAlert("Введите название песни!");
+                tg.showConfirm("Найти " + query + "?", (ok) => {
+                    if (ok) {
+                        // Вместо sendData используем логику, которая просто оставляет окно
+                        // Но данные боту полетят только через закрытие. 
+                        // ЧТОБЫ НЕ ЗАКРЫВАЛОСЬ: нужно использовать внешний сервер (API).
+                        tg.sendData(query); 
+                    }
+                });
             }
         }
     </script>
